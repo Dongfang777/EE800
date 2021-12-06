@@ -1,0 +1,54 @@
+import re
+import numpy as np
+import os
+
+def read_pgm(filepath, byteorder='>'):
+    data = []
+    i = 0
+    j = 0
+    for root, dirs, files in os.walk(filepath):
+        for file in files:
+            if os.path.splitext(file)[1] == '.pgm':
+                print(os.path.join(root, file))
+                print(filepath)
+                with open(os.path.join(root, file), 'rb') as f:
+                    buffer = f.read()
+                    print(buffer)
+                try:
+                    header, width, height, maxval = re.search(
+                        b"(^P6\s(?:\s*#.*[\r\n])*"
+                        b"(\d+)\s(?:\s*#.*[\r\n])*"
+                        b"(\d+)\s(?:\s*#.*[\r\n])*"
+                        b"(\d+)\s(?:\s*#.*[\r\n]\s)*)", buffer).groups()
+                except AttributeError:
+                    raise ValueError("Not a raw PGM file: '%s'")
+
+                data1 = np.frombuffer(buffer,
+                                 dtype='u1' if int(maxval) < 256 else byteorder + 'u2',
+                                 count=int(width) * int(height),
+                                 #offset=len(header)
+                                 ).reshape((int(height), int(width)))
+
+                data1 = data1.reshape(1, 50176)
+
+                j = j + 1
+                if i == 0:
+                    data = data1
+                    print(data.shape)
+
+                else:
+                     data = np.column_stack([data, data1])
+                i = i + 1
+
+    data = data.reshape(j, 50176)
+    data = np.transpose(data).tolist()
+
+    return data
+
+
+if __name__ == "__main__":
+
+    data = read_pgm("C:/Users/zdf/Desktop/人脸识别数据/BioID/1_ge_shi_zhuan_huan/s24/", byteorder='<')
+
+    np.savetxt('s24.csv', data, delimiter=',')
+
