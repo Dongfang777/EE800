@@ -1,0 +1,119 @@
+import torch
+import torch.optim as optim
+import matplotlib.pyplot as plt
+from matplotlib.pyplot import figure
+import torch.nn as nn
+import numpy as np
+import torch.nn.functional as F
+from sklearn.model_selection import train_test_split
+from sklearn import preprocessing
+import pandas as pd
+torch.cuda.empty_cache()
+from torch.utils.data import DataLoader,TensorDataset
+
+from vgg import vgg11 as vgg11  #导入模型
+
+device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
+"""------------------------------------------------------------------准备数据---------------------------------------------------"""
+data = pd.read_csv("D:/人脸识别/BioID/3_fen_lei_chu_li/result3.csv",engine='python', header=None)
+data = np.array(data).astype('float64')
+data = data.T
+
+
+train_data = data[:,:-1]  #取所有行，0-50176列为样本数据
+train_data = np.array(train_data).astype('float64')
+train_labels = data[:,[-1]] #取所有行，50177列为样本标签
+train_labels = np.array(train_labels).astype('float64')
+
+train_x,test_x,train_y,test_y = train_test_split(train_data,train_labels,test_size=0.25)
+
+min_max_scaler = preprocessing.MinMaxScaler()   #将数据缩至0-1之间，采用MinMaxScaler函数
+train_x = min_max_scaler.fit_transform(train_x)
+min_max_scaler = preprocessing.MinMaxScaler()
+test_x = min_max_scaler.fit_transform(test_x)
+
+train_x = torch.Tensor(train_x)
+train_x = torch.Tensor(train_x).view(-1,1,224,224)
+train_y = torch.LongTensor(train_y)
+train_y  = train_y.reshape(train_y.shape[0])
+
+test_x = torch.Tensor(test_x)
+test_x = torch.Tensor(test_x).view(-1,1,224,224)
+test_y = torch.LongTensor(test_y)
+test_y = test_y.reshape(test_y.shape[0])
+
+train_dataset = TensorDataset(train_x,train_y)
+test_dataset = TensorDataset(test_x,test_y)
+
+train_loader = DataLoader(train_dataset, batch_size=20, shuffle=False, num_workers=0)    #定义for batch_idx, (data, target) in enumerate(train_loader):中一块date中的样本数，如batch_size=20=20，那么一个批量中有20个样本
+test_loader = DataLoader(test_dataset, batch_size=20, num_workers=0, shuffle=False)
+
+"""--------------------------------------构建模型和优化器--------------------------------------------------"""
+numclasses=5
+model = vgg11(num_classes=numclasses)
+model.to(device)
+#optimizer = optim.SGD(model.parameters(), lr=0.005, momentum=0.9, weight_decay=1e-4)
+lr=0.05
+optimizer = optim.Adam(model.parameters())
+
+
+"""==========================================在不同的迭代次数下，采用不同的学习率==================================="""
+def adjust_lr(optimizer, epoch):
+    if epoch in [100*0.5, 100*0.75, 100*0.85]:
+        for p in optimizer.param_groups:
+            p['lr'] *= 0.1
+            lr = p['lr']
+        print('Change lr:'+str(lr))
+
+Loss_list = []
+Accuracy_list = []
+
+epochs = []
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+"""--------------------------------------构建迭代训练------------------------------------------------------"""
+def train(epoch):
+    running_loss = 0.0
+    for batch_idx, (data, target) in enumerate(train_loader):   #enumerate（）遍历一个集合对象
+        data, target = data.to(device), target.to(device)   #把计算张量迁移到GPU
+        optimizer.zero_grad()
+        output = model(data)
+        loss = F.cross_entropy(output, target)
+        loss.backward()
+        optimizer.step()
+
+        running_loss += loss.item()
+
+        if (batch_idx + 1) % 10 == 0:  #batch_idx等于总样本数除以batch_size
+            print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+                epoch, (batch_idx + 1) * len(data), len(train_loader.dataset),
+                100. * (batch_idx + 1)/ len(train_loader), loss.item()))     #format()用于输出规定字符串
+
+def tst():
+    model.eval()
+    test_loss = 0
+    correct = 0
+    for data, target in test_loader:
+        data, target = data.to(device), target.to(device)
+        output = model(data)
+        test_loss += F.cross_entropy(output, target).item() # sum up batch loss
+        pred = output.data.max(1, keepdim=True)[1] # get the index of the max log-probability
+        correct += pred.eq(target.data.view_as(pred)).cpu().sum()
+
+    test_loss /= len(test_loader.dataset)
+    print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.2f}%)\n'.format(
+        test_loss, correct, len(test_loader.dataset),
+        100 * float(correct) / float(len(test_loader.dataset))))
+
+    Loss_list.append(test_loss)
+    Accuracy_list.append(100 * float(correct) / float(len(test_loader.dataset)))
+    epochs.append(epoch)
+    return 100 * float(correct) / float(len(test_loader.dataset))
+
+for epoch in range(1, 501):
+    train(epoch)
+    tst()
+
+Accuracy_list = np.array(Accuracy_list)
+Accuracy1 = np.mat(Accuracy_list)
+Loss_list = np.array(Loss_list)
+Loss_list1 = np.mat(Loss_list)
