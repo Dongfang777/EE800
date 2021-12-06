@@ -1,0 +1,60 @@
+import os
+import pandas as pd
+import glob
+import numpy as np
+import pandas as pd
+
+#data1 = pd.read_csv('C:/Users/Desktop/人脸识别数据/BioID/2_da_biao_qian_hou_de_shu_ju/s1.csv')
+data2 = pd.read_csv('D:/人脸识别\BioID/2_da_biao_qian_hou_de_shu_ju/s2.csv')
+#data3 = pd.read_csv('C:/Users/Desktop/人脸识别数据/BioID/2_da_biao_qian_hou_de_shu_ju/s3.csv')
+#data4 = pd.read_csv('C:/Users/Desktop/人脸识别数据/BioID/2_da_biao_qian_hou_de_shu_ju/s4.csv')
+data5 = pd.read_csv('D:/人脸识别\BioID/2_da_biao_qian_hou_de_shu_ju/s5.csv')
+#data6 = pd.read_csv('C:/Users/Desktop/人脸识别数据/BioID/2_da_biao_qian_hou_de_shu_ju/s6.csv')
+#data7 = pd.read_csv('C:/Users/Desktop/人脸识别数据/BioID/2_da_biao_qian_hou_de_shu_ju/s7.csv')
+#data8 = pd.read_csv('C:/Users/Desktop/人脸识别数据/BioID/2_da_biao_qian_hou_de_shu_ju/s8.csv')
+#data9 = pd.read_csv('C:/Users/Desktop/人脸识别数据/BioID/2_da_biao_qian_hou_de_shu_ju/s9.csv')
+#data10 = pd.read_csv('C:/Users/Desktop/人脸识别数据/BioID/2_da_biao_qian_hou_de_shu_ju/s10.csv')
+#data11 = pd.read_csv('C:/Users/Desktop/人脸识别数据/BioID/2_da_biao_qian_hou_de_shu_ju/s11.csv')
+#data12 = pd.read_csv('C:/Users/Desktop/人脸识别数据/BioID/2_da_biao_qian_hou_de_shu_ju/s12.csv')
+#data13 = pd.read_csv('C:/Users/Desktop/人脸识别数据/BioID/2_da_biao_qian_hou_de_shu_ju/s13.csv')
+data14 = pd.read_csv('D:/人脸识别\BioID/2_da_biao_qian_hou_de_shu_ju/s14.csv')
+#data15 = pd.read_csv('C:/Users/Desktop/人脸识别数据/BioID/2_da_biao_qian_hou_de_shu_ju/s15.csv')
+#data16 = pd.read_csv('C:/Users/Desktop/人脸识别数据/BioID/2_da_biao_qian_hou_de_shu_ju/s16.csv')
+data17 = pd.read_csv('D:/人脸识别\BioID/2_da_biao_qian_hou_de_shu_ju/s17.csv')
+#data18 = pd.read_csv('C:/Users/Desktop/人脸识别数据/BioID/2_da_biao_qian_hou_de_shu_ju/s18.csv')
+data19 = pd.read_csv('D:/人脸识别\BioID/2_da_biao_qian_hou_de_shu_ju/s19.csv')
+#data20 = pd.read_csv('C:/Users/Desktop/人脸识别数据/BioID/2_da_biao_qian_hou_de_shu_ju/s20.csv')
+#data21 = pd.read_csv('C:/Users/Desktop/人脸识别数据/BioID/2_da_biao_qian_hou_de_shu_ju/s21.csv')
+#data22 = pd.read_csv('C:/Users/Desktop/人脸识别数据/BioID/2_da_biao_qian_hou_de_shu_ju/s22.csv')
+#data23 = pd.read_csv('D:/人脸识别\BioID/2_da_biao_qian_hou_de_shu_ju/s23.csv')
+#data24 = pd.read_csv('C:/Users/Desktop/人脸识别数据/BioID/2_da_biao_qian_hou_de_shu_ju/s24.csv')
+
+
+
+
+#frames = [data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11,
+    #      data12, data13, data14, data15, data16, data17, data18, data19, data20, data21, data22, data23, data24]
+
+frames = [data2,data5,data14,data17, data19]
+frame1 = pd.concat(frames, ignore_index=True, axis=1)
+np.savetxt('result3.csv', frame1, delimiter=',')
+
+
+
+
+
+"""
+csv_list = glob.glob('C:/Users/zdf/Desktop/人脸识别数据/BioID/2_da_biao_qian_hou_de_shu_ju/*.csv')
+
+print(u'共发现%s个CSV文件'% len(csv_list))
+print(u'正在处理…')
+
+for i in csv_list: #循环读取同文件夹下的csv文件
+
+    fr = open(i,'rb').read()
+    with open('result1.csv','ab') as f: #将结果保存为result.csv
+
+        f.write(fr)
+
+print(u'合并完毕！')
+"""
