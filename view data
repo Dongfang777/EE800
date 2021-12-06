@@ -1,0 +1,31 @@
+import torch
+import torch.optim as optim
+import matplotlib.pyplot as plt
+from matplotlib.pyplot import figure
+import torch.nn as nn
+import numpy as np
+import torch.nn.functional as F
+from sklearn.model_selection import train_test_split
+from sklearn import preprocessing
+import pandas as pd
+
+torch.cuda.empty_cache()
+from torch.utils.data import DataLoader, TensorDataset
+
+
+data = pd.read_csv("C:/Users/夏秀鑫/Desktop/人脸识别数据/BioID/3_fen_lei_chu_li/result1.csv",engine='python', header=None,error_bad_lines=False)
+data = np.array(data).astype('float64')
+data = data.T
+print(data.shape)
+
+train_data = data[:,:-1]  #取所有行，0-50176列为样本数据
+train_data = np.array(train_data).astype('float64')
+train_labels = data[:,[-1]] #取所有行，50177列为样本标签
+train_labels = np.array(train_labels).astype('float64')
+
+
+print(train_data)
+print(train_labels)
+
+print(train_data.shape)
+print(train_labels.shape)
