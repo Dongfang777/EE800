@@ -17,4 +17,4 @@ The purpose of 'Merge into Total Data Set' is to attach labels to each category.
 After running main3 program, the classification accuracy can reach 100% after reducing parameters.
 
 
-I'm still working on the final report. Thank you for your patience.
+I'm still working on the final report. Thanks for your patience.
