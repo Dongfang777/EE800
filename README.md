@@ -12,7 +12,7 @@ The purpose of 'Merge into Total Data Set' is to attach labels to each category.
 
 'main1' is the program that does not reduce the number of parameters, and the classification accuracy is about 80% or more.  
 
-'main3' this program is to replace the conventional convolution calculation process with depthwise separable convolution to achieve the reduction of parameters, the call VGG subfunction is'vgg3'.  
+'main3' this program is to replace the conventional convolution calculation process with depthwise separable convolution to achieve the reduction of parameters, the call VGG subfunction is 'vgg3'.  
 
 After running main3 program, the classification accuracy can reach 100% after reducing parameters.
 
