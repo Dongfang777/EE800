@@ -13,7 +13,7 @@ torch.cuda.empty_cache()
 from torch.utils.data import DataLoader, TensorDataset
 
 
-data = pd.read_csv("C:/Users/夏秀鑫/Desktop/人脸识别数据/BioID/3_fen_lei_chu_li/result1.csv",engine='python', header=None,error_bad_lines=False)
+data = pd.read_csv("C:/Users/zdf/Desktop/人脸识别数据/BioID/3_fen_lei_chu_li/result1.csv",engine='python', header=None,error_bad_lines=False)
 data = np.array(data).astype('float64')
 data = data.T
 print(data.shape)
