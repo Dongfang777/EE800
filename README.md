@@ -8,7 +8,7 @@ The program 'format conversion' is used to convert original images to data form.
 
 The purpose of 'Merge into Total Data Set' is to attach labels to each category.  That's the output category, 24 categories, 0 to 23.  Since we are using the 5 category as an example, our category labels are 0 to 4.  
 
-‘vgg’is the vgg11 constructuion I used for the project.
+‘vgg’ is the vgg11 constructuion I used for the project.
 
 'main1' is the program that does not reduce the number of parameters, and the classification accuracy is about 80% or more.  
 
