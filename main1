@@ -103,6 +103,8 @@ def tst():
     print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.2f}%)\n'.format(
         test_loss, correct, len(test_loader.dataset),
         100 * float(correct) / float(len(test_loader.dataset))))
+        
+        
 
     Loss_list.append(test_loss)
     Accuracy_list.append(100 * float(correct) / float(len(test_loader.dataset)))
